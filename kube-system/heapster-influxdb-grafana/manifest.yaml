@@ -1,0 +1,46 @@
+---
+package:
+  name: kube-system/heapster-influxdb-grafana
+  author: Antoine Legrand
+  version: 1.0.0
+  description: heapster-influxdb-grafana
+  license: MIT
+
+variables:
+  namespace: kube-system
+  grafana_image: gcr.io/google_containers/heapster_grafana:v2.6.0-2
+  influxdb_image: gcr.io/google_containers/heapster_influxdb:v0.5
+  influxdb_url: "http://monitoring-influxdb:8086"
+  svc_type: NodePort
+  base_metrics_memory: "140Mi"
+  base_metrics_cpu: "80m"
+  base_eventer_memory: "190Mi"
+  metrics_memory_per_node: 4
+  metrics_cpu_per_node: 0.5
+  eventer_memory_per_node: 500
+  nanny_memory_per_node: 200
+  num_nodes: 3
+  metrics_memory: "300Mi"
+  metrics_cpu: "100m"
+  eventer_memory: "250Mi"
+  nanny_memory: "90Mi"
+  # metrics_memory = (200 + num_nodes * metrics_memory_per_node)|string + "Mi"
+  # metrics_cpu = (80 + num_nodes * metrics_cpu_per_node)|string + "m"
+  # eventer_memory = (200 * 1024 + num_nodes * eventer_memory_per_node)|string + "Ki"
+  # nanny_memory = (90 * 1024 + num_nodes * nanny_memory_per_node)|string + "Ki"
+
+resources:
+  - file: influxdb-rc.yml
+    type: rc
+    name: influxdb-grafana
+
+  - file: influxdb-svc.yml
+    type: svc
+    name: monitoring-influxdb
+
+  - file: grafana-svc.yml
+    type: svc
+    name: monitoring-grafana
+
+deploy:
+  - name: $self

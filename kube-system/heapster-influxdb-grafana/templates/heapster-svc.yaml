@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: heapster
+  namespace: {{namespace}}
+  labels:
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "Heapster"
+spec: 
+  type: {{svc_type}}
+  ports: 
+    - port: 80
+      targetPort: 8082
+  selector: 
+    k8s-app: heapster
