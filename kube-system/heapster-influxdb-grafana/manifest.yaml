@@ -44,5 +44,13 @@ resources:
     type: svc
     name: monitoring-grafana
 
+  - file: heapster-rc.yaml
+    type: rc
+    name: heapster
+
+  - file: heapster-svc.yaml
+    type: svc
+    name: heapster
+
 deploy:
   - name: $self
